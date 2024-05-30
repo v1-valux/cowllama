@@ -22,15 +22,10 @@ echo 'alias ollama="/path/to/cowllama.sh"' >> ~/.bashrc
 ```
 2. install `cowsay` on your system:
 
-```
-# Debian:
-apt install cowsay
+- Debian: `apt install cowsay`
+- Arch: `yay -S cowsay`
 
-# Arch:
-yay -S cowsay
-
-..you'll figure it out.
-```
+..you'll figure it out..
 
 3. copy `cows/llama.cow` from this repository to `/usr/share/cows/`
 
