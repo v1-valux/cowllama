@@ -201,7 +201,7 @@ case $VENG in
         ;;
     --update-all) update_all;
         ;;
-    *) native;
+    *) native "$@";
         ;;
 esac
 shift
