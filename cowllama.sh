@@ -10,7 +10,7 @@ OLLAMA_BINARY="ollama"
 
 # Available URLs for APIs (leave empty to disable)
 OLLAMA_LOCAL_URL="http://localhost:11434"
-OLLAMA_DOCKER_URL="http://host.docker.internal:11434"
+OLLAMA_DOCKER_URL="http://localhost:11434"
 OLLAMA_REMOTE_URL="https://ollama.example.com"
 
 ###################
@@ -33,13 +33,19 @@ VCMD=$2
 VMODEL=$3
 VPROMPT="${VARGS[@]:3:$ARGLENGTH}"
 
-if [[ "$OLLAMA_CONTAINER" == "" ]]; then
+# take binary into account, but
+if [[ "$OLLAMA_BINARY" != "" ]]; then
+    OLLAMA=$OLLAMA_BINARY
     VENGINE="Local"
-    OLLAMA=$OLLAMA_LOCAL
-else
-    VENGINE="Docker"
-    OLLAMA="docker exec -it $OLLAMA_CONTAINER ollama"
 fi
+
+# default to docker if possible
+if [[ "$OLLAMA_CONTAINER" != "" ]]; then
+    OLLAMA_DOCKER="docker exec -it $OLLAMA_CONTAINER ollama"
+    OLLAMA=$OLLAMA_DOCKER
+    VENGINE="Docker"
+fi
+
 
 health() {
     case $VENGINE in
@@ -77,7 +83,7 @@ run() {
                 # if not
                 echo "ollama not installed locally" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
             );
-            echo -e "(Engine: $VENGINE)";
+            echo -e "\nAPI: $VENGINE";
             ;;
 
         Remote)
@@ -94,21 +100,21 @@ run() {
                 }' | jq -r '.choices[0].message.content' | cowsay -W 60 -e "$EYE" -f $COWFILE
             ) || (
                 # if not
-                echo "API not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
+                echo "Ollama not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
             );
-            echo -e "\n(Engine: $VENGINE)";
+            echo -e "\nAPI: $VENGINE";
             ;;
 
         Docker)
             # check if container available
             $OLLAMA_DOCKER -v 2>&1 >/dev/null && (
                 # if true
-                $OLLAMA run "$VMODEL" "$VPROMPT"
+                $OLLAMA_DOCKER run "$VMODEL" "$VPROMPT"
             ) || (
                 # if not
-                echo "API not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
+                echo "Ollama not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
             );
-            echo -e "(Engine: $VENGINE)";
+            echo -e "\nAPI: $VENGINE";
             ;;
     esac
 }
@@ -121,9 +127,9 @@ list() {
         curl $OLLAMA_API/api/tags -s | jq -r '.models[].name'
     ) || (
         # if not
-        echo "API not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
+        echo "Ollama not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
     );
-    echo -e "\n(Engine: $VENGINE)";
+    echo -e "\nAPI: $VENGINE";
 }
 
 pull() {
@@ -138,9 +144,9 @@ pull() {
             echo
     ) || (
         # if not
-        echo "API not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
+        echo "Ollama not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
     )
-    echo -e "\n(Engine: $VENGINE)";
+    echo -e "\nAPI: $VENGINE";
 }
 
 update_all() {
@@ -168,30 +174,34 @@ update_all() {
         done
     ) || (
         # if not
-        echo "API not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
+        echo "Ollama not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
     );
-    echo -e "\n(Engine: $VENGINE)";
+    echo -e "\nAPI: $VENGINE";
+}
+
+native() {
+    echo
+    $OLLAMA "$@"
+    echo -e "\nAPI: $VENGINE";
+    
 }
 
 case $VENG in
     --local|-L) VENGINE="Local";
-        OLLAMA="ollama"
         OLLAMA_API=$OLLAMA_LOCAL_URL;
         ;;
     --docker|-D) VENGINE="Docker";
-        OLLAMA="docker exec -it ollama ollama"
         OLLAMA_API=$OLLAMA_DOCKER_URL;
         ;;
     --remote|-R) VENGINE="Remote";
         OLLAMA_API=$OLLAMA_REMOTE_URL;
         ;;
-    --health) health;
+    --health) VENGINE="";
+        health;
         ;;
     --update-all) update_all;
         ;;
-    *) echo
-        $OLLAMA "$@"
-        echo -e "\n(Engine: $VENGINE)"
+    *) native;
         ;;
 esac
 shift
