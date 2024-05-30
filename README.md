@@ -2,16 +2,24 @@
 Provides a bash interface for local and remotely hosted ollama APIs powered by cowsay
 
 ```
- ___________________ 
-< Ollama is running >
- ------------------- 
-      \
-       \   /\⌒⌒⌒⌒⌒/\
-        \ {         }
-          (°('◞◟') °)
-          (         )
-          (         )
+ ___________________           ___________________ 
+< Ollama is running >         ( API not available )
+ -------------------           ------------------- 
+      \                             o
+       \   /\⌒⌒⌒⌒⌒/\                 o   /\⌒⌒⌒⌒⌒/\
+        \ {         }                 o {         }
+          (°('◞◟') °)                   (+('◞◟') +)
+          (         )                   (   U     )
+          (         )                   (         )
 ```
+
+
+
+
+
+
+
+
 
 ## Usage: ##
 
