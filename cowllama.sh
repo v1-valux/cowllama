@@ -19,7 +19,7 @@ OLLAMA_REMOTE_URL="https://ollama.example.com"
 
 # Eyes and tongue of the llama
 COWFILE="llama"
-EYE="⦿"
+EYE="°"
 TONGUE="U "
 
 ###############################
@@ -54,7 +54,7 @@ health() {
             sleep 0.5
             # check if api available
             curl $OLLAMA_API/ -I -s 2>&1 >/dev/null && (
-                curl $OLLAMA_API/ -s | cowsay -W 60 -e "$EYE" -f $COWFILE
+                curl $OLLAMA_API/ -s | cowsay -W 60 -e $EYE -f $COWFILE
             ) || (
                 # if not
                 echo "API not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
@@ -97,7 +97,7 @@ run() {
                         "role": "user",
                         "content": "'"${VPROMPT//\"/\\\"}"'"
                     }]
-                }' | jq -r '.choices[0].message.content' | cowsay -W 60 -e "$EYE" -f $COWFILE
+                }' | jq -r '.choices[0].message.content' | cowsay -W 60 -e $EYE -f $COWFILE
             ) || (
                 # if not
                 echo "Ollama not available" | cowthink -W 60 -e "X" -T "$TONGUE" -f $COWFILE 2>/dev/null
@@ -155,7 +155,7 @@ update_all() {
         #if true
         # countdown
         countdown=5;
-        echo -e "Time to Update all $VENGINE models .." | cowthink -e "$EYE" -f $COWFILE;
+        echo -e "Time to Update all $VENGINE models .." | cowthink -e $EYE -f $COWFILE;
         echo
         while [ $countdown -gt 0 ]; do
             echo -ne "         Updating in $countdown\033[0K\r"
