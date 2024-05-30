@@ -124,7 +124,7 @@ list() {
     # check if api available
     curl $OLLAMA_API/ -I -s 2>&1 >/dev/null && (
         # if true
-        curl $OLLAMA_API/api/tags -s | jq -r '.models[].name'
+        curl $OLLAMA_API/api/tags -s | jq -r '.models|=sort_by(.name)|.models[].name'
     ) || (
         # if not
         echo "Ollama not available" | cowthink -W 60 -e "+" -T "$TONGUE" -f $COWFILE 2>/dev/null
