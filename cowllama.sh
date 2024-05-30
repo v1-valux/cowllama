@@ -59,7 +59,7 @@ health() {
                 # if not
                 echo "API not available" | cowthink -W 60 -e "+" -T "$TONGUE" -f $COWFILE 2>/dev/null
             );
-            echo -e "\n(Engine: $VENGINE)";
+            echo -e "\nAPI: $VENGINE";
             ;;
 
         *)
