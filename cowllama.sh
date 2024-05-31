@@ -30,6 +30,7 @@ VARGS=($@)
 ARGLENGTH=${#VARGS[@]}
 VENG=$1
 VCMD=$2
+VENG_ARGS="${VARGS[@]:1:$ARGLENGTH}"
 VMODEL=$3
 VPROMPT="${VARGS[@]:3:$ARGLENGTH}"
 
@@ -204,7 +205,6 @@ case $VENG in
     *) native "$@";
         ;;
 esac
-shift
 
 case $VCMD in
     health) health;
@@ -217,4 +217,5 @@ case $VCMD in
         ;;
     update-all) update_all;
         ;;
+    *) native "$VENG_ARGS";
 esac
