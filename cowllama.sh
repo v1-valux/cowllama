@@ -120,10 +120,10 @@ run() {
 }
 
 list() {
-    echo -e "\nAvailable models:\n";
     # check if api available
     curl $OLLAMA_API/ -I -s 2>&1 >/dev/null && (
         # if true
+        echo -e "\nAvailable models:\n";
         curl $OLLAMA_API/api/tags -s | jq -r '.models|=sort_by(.name)|.models[].name'
     ) || (
         # if not
