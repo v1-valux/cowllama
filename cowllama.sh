@@ -182,7 +182,7 @@ update_all() {
 
 native() {
     echo
-    $OLLAMA "$@"
+    $OLLAMA $@
     echo -e "\nAPI: $VENGINE";
     
 }
