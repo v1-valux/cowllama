@@ -20,16 +20,22 @@ Provides a bash interface for local and remotely hosted ollama APIs powered by c
 ```bash
 echo 'alias ollama="/path/to/cowllama.sh"' >> ~/.bashrc
 ```
-2. install `cowsay` on your system:
+
+2. set execute permissions
+```
+sudo chmod +x /path/to/cowllama.sh
+```
+
+3. install `cowsay` on your system:
 
 - Debian: `apt install cowsay`
 - Arch: `yay -S cowsay`
 
-..you'll figure it out..
+  ..you'll figure it out..
 
-3. copy `cows/llama.cow` from this repository to `/usr/share/cows/`
+4. copy `cows/llama.cow` from this repository to `/usr/share/cows/`
 
-4. run it as you would normally run ollama, but with additional argument-options:
+5. run it as you would normally run ollama, but with additional argument-options:
 
 ```
 ollama [[OPTIONS] [MODEL] [PROMPT]]
