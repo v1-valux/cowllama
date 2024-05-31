@@ -69,8 +69,10 @@ health() {
             echo -e "DOCKER \t $(curl $OLLAMA_DOCKER_URL/ -s -I &> /dev/null && echo 'Healthy' || echo 'Not Available')";
             echo -e "LOCAL \t $(curl $OLLAMA_LOCAL_URL/ -s -I &> /dev/null && echo 'Healthy' || echo 'Not Available')";
             echo -e "REMOTE \t $(curl $OLLAMA_REMOTE_URL/ -I &> /dev/null && echo 'Healthy' || echo 'Not Available')";
+            echo
             ;;
-        esac
+    esac
+    exit;
 }
 
 run() {
@@ -118,6 +120,7 @@ run() {
             echo -e "\nAPI: $VENGINE";
             ;;
     esac
+    exit;
 }
 
 list() {
@@ -131,6 +134,7 @@ list() {
         echo "Ollama not available" | cowthink -W 60 -e "+" -T "$TONGUE" -f $COWFILE 2>/dev/null
     );
     echo -e "\nAPI: $VENGINE";
+    exit;
 }
 
 pull() {
@@ -148,6 +152,7 @@ pull() {
         echo "Ollama not available" | cowthink -W 60 -e "+" -T "$TONGUE" -f $COWFILE 2>/dev/null
     )
     echo -e "\nAPI: $VENGINE";
+    exit;
 }
 
 update_all() {
@@ -178,13 +183,14 @@ update_all() {
         echo "Ollama not available" | cowthink -W 60 -e "+" -T "$TONGUE" -f $COWFILE 2>/dev/null
     );
     echo -e "\nAPI: $VENGINE";
+    exit;
 }
 
 native() {
     echo
     $OLLAMA $@
     echo -e "\nAPI: $VENGINE";
-    exit 0;
+    exit;
 }
 
 case $VENG in
@@ -202,7 +208,7 @@ case $VENG in
         ;;
     --update-all) update_all;
         ;;
-    *) native $@;
+    *) native "$@";
         ;;
 esac
 
@@ -217,5 +223,5 @@ case $VCMD in
         ;;
     update-all) update_all;
         ;;
-    *) native $VENG_ARGS
+    *) native "$VENG_ARGS";
 esac
