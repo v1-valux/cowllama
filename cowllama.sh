@@ -184,7 +184,7 @@ native() {
     echo
     $OLLAMA $@
     echo -e "\nAPI: $VENGINE";
-    
+    exit 0;
 }
 
 case $VENG in
@@ -202,7 +202,7 @@ case $VENG in
         ;;
     --update-all) update_all;
         ;;
-    *) native "$@";
+    *) native $@;
         ;;
 esac
 
@@ -217,5 +217,5 @@ case $VCMD in
         ;;
     update-all) update_all;
         ;;
-    *) native "$VENG_ARGS";
+    *) native $VENG_ARGS
 esac
